@@ -35,8 +35,8 @@ public class WebFrameworkAction {
                     if (md.isAnnotationPresent(WebMethodFramework.class)
                             && findMethodInClass(classFramework, ta.url(), req)) {
                         System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
-                        generateContent(req, resp, ta.jspPath());
                         md.invoke(cls.newInstance(), req, resp);
+                        generateContent(req, resp, ta.jspPath());
                         redirect(req, resp, classFramework.layout(), ta.jspPath());
                         return;
                     }
