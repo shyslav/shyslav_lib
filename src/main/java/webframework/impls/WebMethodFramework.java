@@ -1,6 +1,7 @@
 package webframework.impls;
 
 
+import com.sun.istack.internal.NotNull;
 import webframework.entity.RoleType;
 
 import java.lang.annotation.ElementType;
@@ -16,5 +17,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WebMethodFramework {
     String url() default "";
-    RoleType role() default RoleType.USER;
+    @NotNull
+    RoleType role();
 }
