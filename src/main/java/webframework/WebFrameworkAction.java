@@ -34,8 +34,9 @@ public class WebFrameworkAction {
                         if (md.isAnnotationPresent(WebMethodFramework.class)
                                 && generateLinkToMethod(classFramework.urlPath(), ta.url(), req)) {
                             System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
-                            generateContent(req,resp,ta.jspPath());
+                            generateContent(req, resp, ta.jspPath());
                             md.invoke(cls.newInstance(), req, resp);
+                            redirect(req, resp, classFramework.layout(),ta.jspPath());
                             return;
                         }
                     }
@@ -43,8 +44,34 @@ public class WebFrameworkAction {
             }
         }
     }
-    private static void generateContent(HttpServletRequest req,HttpServletResponse resp, String path) throws ServletException, IOException {
-        if(!path.equalsIgnoreCase("ajax")) {
+
+    /**
+     * Generate redirect to layout
+     *
+     * @param request  - servlet request
+     * @param response - servlet response
+     * @param layout   - link to layout jsp
+     * @param path     - link to file
+     * @throws ServletException
+     * @throws IOException
+     */
+    private static void redirect(HttpServletRequest request, HttpServletResponse response, String layout, String path) throws ServletException, IOException {
+        if (!path.equalsIgnoreCase("ajax")) {
+            request.getRequestDispatcher("/WEB-INF/app/layout/" + layout.trim() + ".jsp").forward(request, response);
+        }
+    }
+
+    /**
+     * Read jsp file and set to attribute _content_
+     *
+     * @param req  - servlet request
+     * @param resp - servlet response
+     * @param path - link to file
+     * @throws ServletException
+     * @throws IOException
+     */
+    private static void generateContent(HttpServletRequest req, HttpServletResponse resp, String path) throws ServletException, IOException {
+        if (!path.equalsIgnoreCase("ajax")) {
             HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(resp) {
                 private final StringWriter sw = new StringWriter();
 
@@ -63,6 +90,7 @@ public class WebFrameworkAction {
             req.setAttribute("_content_", content);
         }
     }
+
     /**
      * Get path to controller
      *
@@ -93,7 +121,7 @@ public class WebFrameworkAction {
             result = "/";
         }
         result += classURI.trim();
-        if(methodURI.length()!=0){
+        if (methodURI.length() != 0) {
             result += "/" + methodURI;
         }
         return result.equalsIgnoreCase(req.getRequestURI());
