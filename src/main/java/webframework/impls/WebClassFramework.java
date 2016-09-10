@@ -16,6 +16,6 @@ public @interface WebClassFramework {
     @NotNull
     String layout();
     @NotNull
-    String urlPath();
+    String [] urlPath();
 
 }

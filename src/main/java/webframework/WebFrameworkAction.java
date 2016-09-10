@@ -21,28 +21,62 @@ import java.util.Set;
 public class WebFrameworkAction {
     public static void findController(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException, ServletException, IOException {
         System.out.println(req.getRequestURL());
+        //get all class from controller package
         Reflections reflections = new Reflections("com.shyslav.controller");
+        //get all class with annotation WebClassFramework
         Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(WebClassFramework.class);
         for (Class cls : annotated) {
-            if (cls.isAnnotationPresent(WebClassFramework.class)) {
-                WebClassFramework classFramework = (WebClassFramework) cls.getAnnotation(WebClassFramework.class);
-                if (classFramework.urlPath().equals(getClassPath(req.getRequestURI()))) {
-                    System.out.println("class annotated ; name  -  " + cls.getAnnotation(WebClassFramework.class));
-                    Method[] method = cls.getMethods();
-                    for (Method md : method) {
-                        WebMethodFramework ta = md.getAnnotation(WebMethodFramework.class);
-                        if (md.isAnnotationPresent(WebMethodFramework.class)
-                                && generateLinkToMethod(classFramework.urlPath(), ta.url(), req)) {
-                            System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
-                            generateContent(req, resp, ta.jspPath());
-                            md.invoke(cls.newInstance(), req, resp);
-                            redirect(req, resp, classFramework.layout(),ta.jspPath());
-                            return;
-                        }
+            WebClassFramework classFramework = (WebClassFramework) cls.getAnnotation(WebClassFramework.class);
+            if (findClassURI(classFramework, getClassPath(req.getRequestURI()))) {
+                System.out.println("class annotated ; name  -  " + cls.getAnnotation(WebClassFramework.class));
+                Method[] method = cls.getMethods();
+                for (Method md : method) {
+                    WebMethodFramework ta = md.getAnnotation(WebMethodFramework.class);
+                    if (md.isAnnotationPresent(WebMethodFramework.class)
+                            && findMethodInClass(classFramework, ta.url(), req)) {
+                        System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
+                        generateContent(req, resp, ta.jspPath());
+                        md.invoke(cls.newInstance(), req, resp);
+                        redirect(req, resp, classFramework.layout(), ta.jspPath());
+                        return;
                     }
                 }
             }
         }
+    }
+
+    /**
+     * check if current class framework equals request uri
+     *
+     * @param classFramework - annotation data
+     * @param uri            - request uri
+     * @return - result of find
+     */
+    private static boolean findClassURI(WebClassFramework classFramework, String uri) {
+        if (uri == null) {
+            return true;
+        }
+        for (int i = 0; i < classFramework.urlPath().length; i++) {
+            if (classFramework.urlPath()[i].equals(getClassPath(uri))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param classFramework - annotation data
+     * @param uri            - method uri
+     * @param req            - request
+     * @return result of find method in class
+     */
+    private static boolean findMethodInClass(WebClassFramework classFramework, String uri, HttpServletRequest req) {
+        for (int i = 0; i < classFramework.urlPath().length; i++) {
+            if (isMethod(classFramework.urlPath()[i], uri, req)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -115,7 +149,7 @@ public class WebFrameworkAction {
      * @param req       servlet request
      * @return result of search
      */
-    private static boolean generateLinkToMethod(String classURI, String methodURI, HttpServletRequest req) {
+    private static boolean isMethod(String classURI, String methodURI, HttpServletRequest req) {
         String result = "";
         if (req.getRequestURI().charAt(0) == '/') {
             result = "/";
