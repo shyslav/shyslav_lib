@@ -1,8 +1,8 @@
-package SiteData.storage;
+package siteentity.storage;
 
 
-import SiteData.entity.Role;
-import SiteData.entity.User;
+import siteentity.entity.Role;
+import siteentity.entity.User;
 import database.configuration.DatabaseConnection;
 
 import java.sql.PreparedStatement;

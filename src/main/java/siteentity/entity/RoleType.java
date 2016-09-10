@@ -1,4 +1,4 @@
-package SiteData.entity;
+package siteentity.entity;
 
 /**
  * Created by shyslav on 9/10/16.
@@ -6,5 +6,6 @@ package SiteData.entity;
 public enum RoleType {
     GUEST,
     ADMIN,
-    USER
+    USER,
+    BLOCKED
 }
