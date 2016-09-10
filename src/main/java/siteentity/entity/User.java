@@ -6,12 +6,12 @@ package siteentity.entity;
 public class User {
     private int id;
     private String login;
-    private Role role;
+    private RoleType role;
 
-    public User(int id, String login, Role role) {
+    public User(int id, String login, String role) {
         this.id = id;
         this.login = login;
-        this.role = role;
+        this.role = RoleType.valueOf(role);
     }
 
     public int getId() {
@@ -30,11 +30,11 @@ public class User {
         this.login = login;
     }
 
-    public Role getRole() {
+    public RoleType getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(RoleType role) {
         this.role = role;
     }
 }

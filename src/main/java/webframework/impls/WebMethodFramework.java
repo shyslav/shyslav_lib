@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 public @interface WebMethodFramework {
     String url() default "";
     @NotNull
-    RoleType role();
+    RoleType [] role();
     @NotNull
     String jspPath();
 }

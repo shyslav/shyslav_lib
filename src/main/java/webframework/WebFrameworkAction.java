@@ -1,6 +1,8 @@
 package webframework;
 
 import org.reflections.Reflections;
+import siteentity.entity.RoleType;
+import siteentity.storage.UserStorage;
 import webframework.impls.WebClassFramework;
 import webframework.impls.WebMethodFramework;
 
@@ -34,6 +36,10 @@ public class WebFrameworkAction {
                     WebMethodFramework ta = md.getAnnotation(WebMethodFramework.class);
                     if (md.isAnnotationPresent(WebMethodFramework.class)
                             && findMethodInClass(classFramework, ta.url(), req)) {
+                        if(!checkRole(ta,req)){
+                            resp.sendError(404);
+                            return;
+                        }
                         System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
                         md.invoke(cls.newInstance(), req, resp);
                         generateContent(req, resp, ta.jspPath());
@@ -43,6 +49,28 @@ public class WebFrameworkAction {
                 }
             }
         }
+    }
+
+    /**
+     * Check if user have access to this method
+     * @param ta            - method
+     * @param request       - request
+     * @return
+     */
+    private static boolean checkRole(WebMethodFramework ta, HttpServletRequest request) {
+        UserStorage storage = (UserStorage) request.getSession().getAttribute("userstorage");
+        RoleType type;
+        if (storage.getUser() == null) {
+            type = RoleType.GUEST;
+        } else {
+            type = storage.getUser().getRole();
+        }
+        for (RoleType role : ta.role()) {
+            if (role == type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
