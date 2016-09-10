@@ -14,7 +14,7 @@ public class WebFrameworkServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            WebFrameworkAction.anotate(req, resp);
+            WebFrameworkAction.findController(req, resp);
         } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
@@ -23,7 +23,7 @@ public class WebFrameworkServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            WebFrameworkAction.anotate(req, resp);
+            WebFrameworkAction.findController(req, resp);
         } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
