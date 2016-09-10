@@ -12,7 +12,9 @@ public class UserStorage {
         this.ipAddress = ipAddress;
         this.amounLogin = amounLogin;
     }
-
+    public void increase(){
+        amounLogin++;
+    }
     public String getIpAddress() {
         return ipAddress;
     }

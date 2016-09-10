@@ -61,6 +61,8 @@ public class DatabaseInsert {
                     ps.setInt(i + 1, (int) values[i]);
                 } else if (values[i] instanceof InputStream) {
                     ps.setBinaryStream(i + 1, (InputStream) values[i]);
+                } else if(values[i] instanceof  Long){
+                    ps.setLong(i+1, (Long) values[i]);
                 } else {
                     ps.setString(i + 1, (String) values[i]);
                 }
