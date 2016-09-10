@@ -19,4 +19,6 @@ public @interface WebMethodFramework {
     String url() default "";
     @NotNull
     RoleType role();
+    @NotNull
+    String jspPath();
 }

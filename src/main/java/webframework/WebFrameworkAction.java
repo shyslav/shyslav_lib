@@ -4,8 +4,13 @@ import org.reflections.Reflections;
 import webframework.impls.WebClassFramework;
 import webframework.impls.WebMethodFramework;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -14,7 +19,7 @@ import java.util.Set;
  * Created by shyslav on 9/10/16.
  */
 public class WebFrameworkAction {
-    public static void findController(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    public static void findController(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException, ServletException, IOException {
         System.out.println(req.getRequestURL());
         Reflections reflections = new Reflections("com.shyslav.controller");
         Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(WebClassFramework.class);
@@ -29,6 +34,7 @@ public class WebFrameworkAction {
                         if (md.isAnnotationPresent(WebMethodFramework.class)
                                 && generateLinkToMethod(classFramework.urlPath(), ta.url(), req)) {
                             System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
+                            generateContent(req,resp,ta.jspPath());
                             md.invoke(cls.newInstance(), req, resp);
                             return;
                         }
@@ -37,7 +43,26 @@ public class WebFrameworkAction {
             }
         }
     }
+    private static void generateContent(HttpServletRequest req,HttpServletResponse resp, String path) throws ServletException, IOException {
+        if(!path.equalsIgnoreCase("ajax")) {
+            HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(resp) {
+                private final StringWriter sw = new StringWriter();
 
+                @Override
+                public PrintWriter getWriter() throws IOException {
+                    return new PrintWriter(sw);
+                }
+
+                @Override
+                public String toString() {
+                    return sw.toString();
+                }
+            };
+            req.getRequestDispatcher("/WEB-INF/app/" + path + ".jsp").include(req, responseWrapper);
+            String content = responseWrapper.toString();
+            req.setAttribute("_content_", content);
+        }
+    }
     /**
      * Get path to controller
      *
