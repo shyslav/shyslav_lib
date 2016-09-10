@@ -2,7 +2,7 @@ package webframework.impls;
 
 
 import com.sun.istack.internal.NotNull;
-import webframework.entity.RoleType;
+import SiteData.entity.RoleType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

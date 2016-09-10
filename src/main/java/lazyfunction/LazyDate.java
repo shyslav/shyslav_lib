@@ -1,4 +1,4 @@
-package lazydata;
+package lazyfunction;
 
 /**
  * Created by shyslav on 9/10/16.

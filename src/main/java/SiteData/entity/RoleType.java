@@ -1,4 +1,4 @@
-package webframework.entity;
+package SiteData.entity;
 
 /**
  * Created by shyslav on 9/10/16.

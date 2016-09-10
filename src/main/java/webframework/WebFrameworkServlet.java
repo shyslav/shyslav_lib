@@ -1,6 +1,6 @@
 package webframework;
 
-import webframework.entity.UserStorage;
+import SiteData.storage.UserStorage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
