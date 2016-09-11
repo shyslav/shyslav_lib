@@ -59,6 +59,9 @@ public class UserStorage {
                         LazyDate.getMinutesFromMillis(entry.getKey()) > UserVariables.WRONG_ATTEMPTS_TIME_SAVE);
     }
 
+    public void logout(){
+        user = null;
+    }
     /**
      * GET not correct login from db
      * @return
