@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WebMethodFramework {
+    @NotNull
     String url() default "";
     @NotNull
     RoleType [] role();
