@@ -37,7 +37,7 @@ public class WebFrameworkAction {
                     if (md.isAnnotationPresent(WebMethodFramework.class)
                             && findMethodInClass(classFramework, ta.url(), req)) {
                         if (!checkRole(ta, req)) {
-                            resp.sendError(401);
+                            resp.sendError(404);
                             return;
                         }
                         System.out.println("URL: " + ta.url() + " ROLE:" + ta.role());
