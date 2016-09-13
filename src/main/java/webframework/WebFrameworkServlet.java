@@ -1,5 +1,6 @@
 package webframework;
 
+import siteentity.entity.RoleType;
 import siteentity.storage.UserStorage;
 import webframework.impls.UserVariables;
 
@@ -48,8 +49,12 @@ public class WebFrameworkServlet extends HttpServlet {
      */
     private boolean bannedUserCheck(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UserStorage storage = (UserStorage) request.getSession().getAttribute("userstorage");
-        if (storage.getAmountLogin() >= UserVariables.AMOUN_WRONK_PASSWORD_ATTEMPTS) {
+        if (storage.getUser() != null && storage.getUser().getRole() == RoleType.BLOCKED) {
             response.sendError(302);
+            return true;
+        }
+        if (storage.getAmountLogin() >= UserVariables.AMOUN_WRONK_PASSWORD_ATTEMPTS) {
+            response.sendError(401);
             return true;
         }
         return false;

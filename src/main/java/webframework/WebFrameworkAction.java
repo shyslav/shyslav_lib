@@ -36,7 +36,7 @@ public class WebFrameworkAction {
                     WebMethodFramework ta = md.getAnnotation(WebMethodFramework.class);
                     if (md.isAnnotationPresent(WebMethodFramework.class)
                             && findMethodInClass(classFramework, ta.url(), req)) {
-                        if(!checkRole(ta,req)){
+                        if (!checkRole(ta, req)) {
                             resp.sendError(401);
                             return;
                         }
@@ -49,12 +49,14 @@ public class WebFrameworkAction {
                 }
             }
         }
+        resp.sendError(404);
     }
 
     /**
      * Check if user have access to this method
-     * @param ta            - method
-     * @param request       - request
+     *
+     * @param ta      - method
+     * @param request - request
      * @return
      */
     private static boolean checkRole(WebMethodFramework ta, HttpServletRequest request) {
