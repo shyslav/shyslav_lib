@@ -16,14 +16,14 @@ public class LicenceTest {
     @Test
     public void initializeLicense() {
         InitialLicence licence = new InitialLicence();
-        LicensedUsers user = licence.initialize();
+        LicensedUsers user = licence.get(0);
         assertEquals(user.getComputerName(), LazyComputerInfo.getComputerName());
     }
 
     @Test
     public void writeLicenseFileTest() throws IOException, URISyntaxException {
         InitialLicence licence = new InitialLicence();
-        LicensedUsers user = licence.initialize();
+        LicensedUsers user = licence.get(0);
         LazyWriter.licenceWriteObject(user);
     }
 }

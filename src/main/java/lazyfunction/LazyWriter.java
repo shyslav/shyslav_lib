@@ -18,9 +18,22 @@ public class LazyWriter {
         } else {
             System.out.println("File already exists.");
         }
+        if(users==null){
+            return;
+        }
         DataOutputStream output = new DataOutputStream(new FileOutputStream(file));
-        output.writeBytes(LazyMD5.md5(DataToJson(users)));
+        output.writeBytes(dataToJson(users));
         output.close();
+    }
+
+    public static String licenceGetObject() throws IOException {
+        DataInputStream input = new DataInputStream(new FileInputStream(LazyComputerInfo.getCurrentDir() + "/licenses.dat"));
+        StringBuilder builder = new StringBuilder();
+        while (input.available() > 0) {
+            builder.append(input.readLine());
+        }
+        input.close();
+        return builder.toString();
     }
 
     /**
@@ -29,7 +42,7 @@ public class LazyWriter {
      * @param object object to convert
      * @return json string
      */
-    public static String DataToJson(Object object) {
+    public static String dataToJson(Object object) {
         Gson gson = new GsonBuilder().create();
         return gson.toJson(object);
     }
