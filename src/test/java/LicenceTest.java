@@ -23,7 +23,6 @@ public class LicenceTest {
     @Test
     public void writeLicenseFileTest() throws IOException, URISyntaxException {
         InitialLicence licence = new InitialLicence();
-        LicensedUsers user = licence.get(0);
-        LazyWriter.licenceWriteObject(user);
+        LazyWriter.licenceWriteObject(licence);
     }
 }

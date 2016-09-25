@@ -18,7 +18,9 @@ import java.util.Date;
 public class InitialLicence extends ArrayList<LicensedUsers> {
     public InitialLicence() {
         try {
-            add(readUsers(LazyComputerInfo.getCurrentDir() + "/licenses.dat"));
+            for (LicensedUsers user : readUsers()){
+                add(user);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,6 +50,10 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
         return false;
     }
 
+    /**
+     * Get current user parameters
+     * @return current user parameters
+     */
     private LicensedUsers getCurrentUser() {
         return new LicensedUsers(LazyComputerInfo.getComputerName(),
                 LazyComputerInfo.getUserName(),
@@ -55,10 +61,15 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
                 LazyComputerInfo.getDriverInfo().get(0).getTotalSpace());
     }
 
-    private static LicensedUsers readUsers(String filepath) throws IOException {
+    /**
+     * Read all licensed users
+     * @return licensed users
+     * @throws IOException
+     */
+    private static LicensedUsers[] readUsers() throws IOException {
         Gson gson = new GsonBuilder().create();
         String licenses = LazyWriter.licenceGetObject();
-        LicensedUsers data = gson.fromJson(licenses, LicensedUsers.class);
+        LicensedUsers[] data = gson.fromJson(licenses, LicensedUsers[].class);
         return data;
     }
 }
