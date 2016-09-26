@@ -1,6 +1,6 @@
 package lazyfunction;
 
-import licenseframe.models.DriverInfo;
+import lazyfunction.models.DriverInfo;
 
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;

@@ -74,6 +74,10 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
         );
     }
 
+    /**
+     * Generate computer data to md5
+     * @return md5 computer info with computer name + username + osname
+     */
     private static String generateComputerDataMd5() {
         return LazyMD5.md5(LazyComputerInfo.getComputerName() + "..." + LazyComputerInfo.getUserName() + "..." + LazyComputerInfo.getOSName());
     }
@@ -82,7 +86,7 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
         String query = "delete from license";
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection conn = databaseConnection.getConnection();
-        PreparedStatement preparedStmt = null;
+        PreparedStatement preparedStmt;
         try {
             preparedStmt = conn.prepareStatement(query);
             preparedStmt.execute();
@@ -109,7 +113,7 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (date.after(new Date())) {
+                if (date != null && date.after(new Date())) {
                     return true;
                 }
             }
@@ -123,11 +127,10 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      * @return current user parameters
      */
     private static LicensedUsers getCurrentUser() {
-        LicensedUsers user = new LicensedUsers(LazyComputerInfo.getComputerName(),
+        return new LicensedUsers(LazyComputerInfo.getComputerName(),
                 LazyComputerInfo.getUserName(),
                 LazyComputerInfo.getOSName(),
                 LazyComputerInfo.getDriverInfo().get(0).getTotalSpace());
-        return user;
     }
 
     /**
@@ -138,8 +141,7 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      */
     private static LicensedUsers readUsers(String json) throws IOException {
         Gson gson = new GsonBuilder().create();
-        LicensedUsers data = gson.fromJson(json, LicensedUsers.class);
-        return data;
+        return gson.fromJson(json, LicensedUsers.class);
     }
 
     /**

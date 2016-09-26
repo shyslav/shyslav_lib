@@ -1,4 +1,4 @@
-package licenseframe.models;
+package lazyfunction.models;
 
 /**
  * Created by shyslav on 9/25/16.
