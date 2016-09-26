@@ -85,6 +85,7 @@ public class LazyComputerInfo {
 
     /**
      * Get driver info list
+     *
      * @return driver info list
      */
     public static ArrayList<DriverInfo> getDriverInfo() {
@@ -104,5 +105,23 @@ public class LazyComputerInfo {
             list.add(driverInfo);
         }
         return list;
+    }
+
+    /**
+     * Get linux mouse devices
+     *
+     * @return mouse device array
+     */
+    public static ArrayList<String> getLinuxMouseDevice() {
+        ArrayList<String> mouseDevice = new ArrayList();
+        if (LazyComputerInfo.getOSName().equalsIgnoreCase("linux")) {
+            File roots = new File("/dev/input");
+            for (File root : roots.listFiles()) {
+                if (root.getName().contains("mouse")) {
+                    mouseDevice.add(root.getName());
+                }
+            }
+        }
+        return mouseDevice;
     }
 }
