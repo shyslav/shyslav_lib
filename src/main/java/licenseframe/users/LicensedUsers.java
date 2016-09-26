@@ -1,35 +1,36 @@
 package licenseframe.users;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by shyslav on 9/25/16.
  */
 public class LicensedUsers {
+    private int id;
     private String computerName;
     private String userName;
     private String system;
     private long diskTotalSpace;
     private String dateLicenceStart;
     private String dateLicenceEnd;
-
+    private String md5License;
     public LicensedUsers() {
     }
 
-    public LicensedUsers(String computerName, String userName, String system, long diskTotalSpace, String dateLicenceStart, String dateLicenceEnd) {
+    public LicensedUsers(int id,String computerName, String userName, String system, long diskTotalSpace, String dateLicenceStart, String dateLicenceEnd, String md5License) {
+        this.id = id;
         this.computerName = computerName;
         this.userName = userName;
         this.system = system;
         this.diskTotalSpace = diskTotalSpace;
         this.dateLicenceStart = dateLicenceStart;
         this.dateLicenceEnd = dateLicenceEnd;
+        this.md5License = md5License;
     }
 
     public LicensedUsers(String computerName, String userName, String osName, long totalSpace) {
-
+        this.computerName = computerName;
+        this.userName = userName;
+        this.system = osName;
+        this.diskTotalSpace = totalSpace;
     }
 
     public String getComputerName() {
@@ -79,5 +80,21 @@ public class LicensedUsers {
 
     public void setDateLicenceEnd(String dateLicenceEnd) {
         this.dateLicenceEnd = dateLicenceEnd;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getMd5License() {
+        return md5License;
+    }
+
+    public void setMd5License(String md5License) {
+        this.md5License = md5License;
     }
 }

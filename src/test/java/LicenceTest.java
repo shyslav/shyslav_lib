@@ -1,13 +1,8 @@
-import lazyfunction.LazyComputerInfo;
-import lazyfunction.LazyWriter;
 import licenseframe.InitialLicence;
-import licenseframe.users.LicensedUsers;
-import org.junit.*;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by shyslav on 9/25/16.
@@ -15,14 +10,14 @@ import static org.junit.Assert.*;
 public class LicenceTest {
     @Test
     public void initializeLicense() {
-        InitialLicence licence = new InitialLicence();
-        LicensedUsers user = licence.get(0);
-        assertEquals(user.getComputerName(), LazyComputerInfo.getComputerName());
+        InitialLicence licence = InitialLicence.getLicence();
+        assertNotNull(licence);
+        assertTrue(licence.size()>0);
     }
 
     @Test
-    public void writeLicenseFileTest() throws IOException, URISyntaxException {
-        InitialLicence licence = new InitialLicence();
-        LazyWriter.licenceWriteObject(licence);
+    public void checkLicenseKey(){
+        InitialLicence licence = InitialLicence.getLicence();
+        assertTrue(licence.checkLicense());
     }
 }

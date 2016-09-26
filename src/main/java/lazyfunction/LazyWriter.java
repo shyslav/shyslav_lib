@@ -34,7 +34,7 @@ public class LazyWriter {
     }
 
     /**
-     * Get licence string
+     * Get licence string from file
      *
      * @return licence string
      * @throws IOException
