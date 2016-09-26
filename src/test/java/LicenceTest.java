@@ -17,7 +17,6 @@ public class LicenceTest {
 
     @Test
     public void checkLicenseKey(){
-        InitialLicence licence = InitialLicence.getLicence();
-        assertTrue(licence.checkLicense());
+        assertTrue(InitialLicence.checkLicense());
     }
 }
