@@ -78,7 +78,7 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      * Generate computer data to md5
      * @return md5 computer info with computer name + username + osname
      */
-    private static String generateComputerDataMd5() {
+    public static String generateComputerDataMd5() {
         return LazyMD5.md5(LazyComputerInfo.getComputerName() + "..." + LazyComputerInfo.getUserName() + "..." + LazyComputerInfo.getOSName());
     }
 
