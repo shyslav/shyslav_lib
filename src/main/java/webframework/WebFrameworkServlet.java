@@ -1,5 +1,6 @@
 package webframework;
 
+import licenseframe.InitialLicence;
 import siteentity.entity.RoleType;
 import siteentity.storage.UserStorage;
 import webframework.impls.UserVariables;
@@ -17,8 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 public class WebFrameworkServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        setNewUser(req, resp);
-        if (!bannedUserCheck(req, resp)) {
+        setNewUser(req);
+        if (!bannedUserCheck(req, resp) && checkLicense(resp)) {
             try {
                 WebFrameworkAction.findController(req, resp);
             } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
@@ -29,8 +30,8 @@ public class WebFrameworkServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        setNewUser(req, resp);
-        if (!bannedUserCheck(req, resp)) {
+        setNewUser(req);
+        if (!bannedUserCheck(req, resp) && checkLicense(resp)) {
             try {
                 WebFrameworkAction.findController(req, resp);
             } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
@@ -42,6 +43,7 @@ public class WebFrameworkServlet extends HttpServlet {
 
     /**
      * Check if user banned
+     *
      * @param request
      * @param response
      * @return
@@ -62,14 +64,27 @@ public class WebFrameworkServlet extends HttpServlet {
 
     /**
      * Set new user to session
+     *
      * @param req - servlet request
-     * @param resp - servlet response
      */
-    private void setNewUser(HttpServletRequest req, HttpServletResponse resp) {
+    private void setNewUser(HttpServletRequest req) {
         if (req.getSession().getAttribute("userstorage") == null) {
             String ipAddress = req.getRemoteAddr();
             UserStorage userStorage = new UserStorage(ipAddress);
             req.getSession().setAttribute("userstorage", userStorage);
         }
+    }
+
+    /**
+     * Check license to server computer
+     *
+     * @return true if computer have license
+     */
+    private boolean checkLicense(HttpServletResponse response) throws IOException {
+        if (InitialLicence.checkLicense()) {
+            return true;
+        }
+        response.sendError(999);
+        return false;
     }
 }

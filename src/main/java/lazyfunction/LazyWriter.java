@@ -3,6 +3,7 @@ package lazyfunction;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import licenseframe.InitialLicence;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -11,6 +12,8 @@ import java.net.URISyntaxException;
  * Created by shyslav on 9/25/16.
  */
 public class LazyWriter {
+    private static final Logger log = Logger.getLogger(LazyWriter.class.getName());
+
     /**
      * write licensed list to file
      *
@@ -21,9 +24,9 @@ public class LazyWriter {
     public static void licenceWriteObject(InitialLicence users) throws IOException, URISyntaxException {
         File file = new File(LazyComputerInfo.getCurrentDir() + "/licenses.dat");
         if (file.createNewFile()) {
-            System.out.println("File is created!");
+            log.info("Create new file licenses.dat");
         } else {
-            System.out.println("File already exists.");
+            log.info("File already exist. Reload file from db.");
         }
         if (users == null) {
             return;

@@ -142,6 +142,11 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
         return data;
     }
 
+    /**
+     * Get licenses list
+     *
+     * @return licenses list
+     */
     public static InitialLicence getLicence() {
         return licence;
     }
