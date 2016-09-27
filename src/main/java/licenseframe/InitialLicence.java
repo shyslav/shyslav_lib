@@ -39,7 +39,7 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      * Get from db licenses
      */
     private void getFromDBLicenses() {
-        insertToDBLicenses();
+//        insertToDBLicenses();
         String query = "SELECT * FROM license";
         DatabaseConnection db = new DatabaseConnection();
         try {
