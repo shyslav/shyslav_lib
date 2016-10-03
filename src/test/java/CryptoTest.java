@@ -1,15 +1,13 @@
+import lazyfunction.LazyMD5;
 import org.junit.Test;
-
+import sun.misc.BASE64Encoder;
 
 import javax.crypto.*;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.InvalidKeyException;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidAlgorithmParameterException;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
-
-import sun.misc.BASE64Encoder;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * Created by shyslav on 10/3/16.
@@ -53,9 +51,13 @@ public class CryptoTest {
              *  Step 1. Generate a DES key using KeyGenerator
              *
              */
-            KeyGenerator keyGen = KeyGenerator.getInstance("DES");
-            SecretKey secretKey = keyGen.generateKey();
+            KeyGenerator keyGen = KeyGenerator.getInstance("DESede");
+            SecretKey keyWithoutMd5 = keyGen.generateKey();
 
+            String encodedKey = Base64.getEncoder().encodeToString(keyWithoutMd5.getEncoded());
+            byte[] decodedKey = Base64.getDecoder().decode(LazyMD5.md5(encodedKey));
+
+            SecretKey secretKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DESede");
             /**
              *  Step2. Create a Cipher by specifying the following parameters
              * 			a. Algorithm name - here it is DES
@@ -63,7 +65,7 @@ public class CryptoTest {
              * 			c. Padding - PKCS5Padding
              */
 
-            Cipher desCipher = Cipher.getInstance("DES/CFB/PKCS5Padding"); /* Must specify the mode explicitly as most JCE providers default to ECB mode!! */
+            Cipher desCipher = Cipher.getInstance("DESede/CFB/PKCS5Padding"); /* Must specify the mode explicitly as most JCE providers default to ECB mode!! */
 
             /**
              *  Step 3. Initialize the Cipher for Encryption
@@ -77,7 +79,7 @@ public class CryptoTest {
              *  		2. Convert the Input Text to Bytes
              *  		3. Encrypt the bytes using doFinal method
              */
-            strDataToEncrypt = "Hello World of Encryption using DES ";
+            strDataToEncrypt = "Hello World of Encryption";
             byte[] byteDataToEncrypt = strDataToEncrypt.getBytes();
             byte[] byteCipherText = desCipher.doFinal(byteDataToEncrypt);
             strCipherText = new BASE64Encoder().encode(byteCipherText);
