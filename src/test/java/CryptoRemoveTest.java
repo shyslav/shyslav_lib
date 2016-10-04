@@ -20,15 +20,7 @@ import static org.junit.Assert.*;
 /**
  * Created by shyslav on 10/3/16.
  */
-public class CryptoTest {
-
-    @Test
-    public void lazyCryptTest() {
-        byte[] encode = LazyCrypto.cryptString("Hello vasya pupkin");
-        String test = LazyCrypto.decryptText(encode);
-        assertNotNull(encode);
-        assertNotNull(test);
-    }
+public class CryptoRemoveTest {
 
     /**
      * @author Joe Prasanna Kumar
