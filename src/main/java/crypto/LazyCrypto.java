@@ -18,7 +18,7 @@ import java.security.spec.KeySpec;
 public class LazyCrypto {
     private static final String encryptionCode = LazyMD5.md5("ThisIsSparta");
     /**
-     * Algorithm name "DES,AES" / Mode / Padding - PKCS5Padding
+     * Algorithm name "DES - private key,AES" / Mode / Padding - PKCS5Padding
      */
     private static final String algorithm = "DESede/CFB/PKCS5Padding";
     private static final String cipher = "DESede";
