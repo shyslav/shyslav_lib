@@ -1,3 +1,4 @@
+import crypto.LazyCrypto;
 import lazyfunction.LazyMD5;
 import org.junit.Test;
 import sun.misc.BASE64Encoder;
@@ -14,10 +15,20 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 
+import static org.junit.Assert.*;
+
 /**
  * Created by shyslav on 10/3/16.
  */
 public class CryptoTest {
+
+    @Test
+    public void lazyCryptTest() {
+        byte[] encode = LazyCrypto.cryptString("Hello vasya pupkin");
+        String test = LazyCrypto.decryptText(encode);
+        assertNotNull(encode);
+        assertNotNull(test);
+    }
 
     /**
      * @author Joe Prasanna Kumar
