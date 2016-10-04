@@ -9,9 +9,11 @@ import static org.junit.Assert.*;
 public class LazyCryptoTest {
     @Test
     public void lazyCryptTest() {
-        byte[] encode = LazyCrypto.cryptString("Hello vasya pupkin");
+        String codeString = "Hello vasya pupkin";
+        byte[] encode = LazyCrypto.cryptString(codeString);
         String test = LazyCrypto.decryptText(encode);
         assertNotNull(encode);
         assertNotNull(test);
+        assertEquals(test,codeString);
     }
 }
