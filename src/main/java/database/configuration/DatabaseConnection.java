@@ -23,11 +23,7 @@ public class DatabaseConnection {
         ClassLoader classLoader = getClass().getClassLoader();
         Properties props = new Properties();
         try (InputStream in = classLoader.getResourceAsStream("database/database.properties")) {
-            String inputStreamText = getStringFromInputStream(in);
-            byte[] bytes = new BASE64Decoder().decodeBuffer(inputStreamText);
-            String decryptText = LazyCrypto.decryptText(bytes);
-            InputStream stream = new ByteArrayInputStream(decryptText.getBytes(StandardCharsets.UTF_8));
-            props.load(stream);
+            props.load(getDecodeInputStream(in));
         } catch (IOException ex) {
             log.error("cannot be read properties file" + ex);
         }
@@ -49,7 +45,7 @@ public class DatabaseConnection {
         ClassLoader classLoader = getClass().getClassLoader();
         Properties props = new Properties();
         try (InputStream in = classLoader.getResourceAsStream("database/database.properties")) {
-            props.load(in);
+            props.load(getDecodeInputStream(in));
         } catch (IOException ex) {
             log.error("cannot be read properties file" + ex);
         }
@@ -62,6 +58,23 @@ public class DatabaseConnection {
         return con;
     }
 
+    /**
+     * Ged decode input stream from coded input stream
+     *
+     * @param in coded input stream
+     * @return decode input stream
+     * @throws IOException
+     */
+    public InputStream getDecodeInputStream(InputStream in) throws IOException {
+        String inputStreamText = getStringFromInputStream(in);
+        byte[] bytes = new BASE64Decoder().decodeBuffer(inputStreamText);
+        String decryptText = LazyCrypto.decryptText(bytes);
+        return new ByteArrayInputStream(decryptText.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Action to close connection
+     */
     public void closeConnection() {
         try {
             con.close();
@@ -70,7 +83,12 @@ public class DatabaseConnection {
         }
     }
 
-    // convert InputStream to String
+    /**
+     * Convert input stream to string
+     *
+     * @param is input stream
+     * @return input string
+     */
     private static String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
