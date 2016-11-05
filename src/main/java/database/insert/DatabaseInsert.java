@@ -11,6 +11,7 @@ import java.sql.SQLException;
 /**
  * Created by Shyshkin Vladyslav on 05.05.2016.
  */
+@SuppressWarnings("unused")
 public class DatabaseInsert {
     private static final Logger log = Logger.getLogger(DatabaseInsert.class.getName());
 
