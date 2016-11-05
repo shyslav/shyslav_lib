@@ -1,3 +1,4 @@
+import lazyfunction.LazyWriter;
 import licenseframe.InitialLicence;
 import org.junit.Test;
 
@@ -18,5 +19,12 @@ public class LicenceTest {
     @Test
     public void checkLicenseKey(){
         assertTrue(InitialLicence.checkLicense());
+    }
+
+    @Test
+    public void generateCurrentComputerLicence(){
+        String licence = InitialLicence.generateComputerDataMd5();
+        String computerJson = InitialLicence.generateComputerData();
+        System.out.println(licence);
     }
 }

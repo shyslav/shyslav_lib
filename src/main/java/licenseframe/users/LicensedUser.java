@@ -3,7 +3,7 @@ package licenseframe.users;
 /**
  * Created by shyslav on 9/25/16.
  */
-public class LicensedUsers {
+public class LicensedUser {
     private int id;
     private String computerName;
     private String userName;
@@ -12,10 +12,10 @@ public class LicensedUsers {
     private String dateLicenceStart;
     private String dateLicenceEnd;
     private String md5License;
-    public LicensedUsers() {
+    public LicensedUser() {
     }
 
-    public LicensedUsers(int id,String computerName, String userName, String system, long diskTotalSpace, String dateLicenceStart, String dateLicenceEnd, String md5License) {
+    public LicensedUser(int id, String computerName, String userName, String system, long diskTotalSpace, String dateLicenceStart, String dateLicenceEnd, String md5License) {
         this.id = id;
         this.computerName = computerName;
         this.userName = userName;
@@ -26,11 +26,20 @@ public class LicensedUsers {
         this.md5License = md5License;
     }
 
-    public LicensedUsers(String computerName, String userName, String osName, long totalSpace) {
+    public LicensedUser(String computerName, String userName, String osName, long totalSpace) {
         this.computerName = computerName;
         this.userName = userName;
         this.system = osName;
         this.diskTotalSpace = totalSpace;
+    }
+
+    public LicensedUser(String computerName, String userName, String system, long diskTotalSpace, String dateLicenceStart, String dateLicenceEnd) {
+        this.computerName = computerName;
+        this.userName = userName;
+        this.system = system;
+        this.diskTotalSpace = diskTotalSpace;
+        this.dateLicenceStart = dateLicenceStart;
+        this.dateLicenceEnd = dateLicenceEnd;
     }
 
     public String getComputerName() {

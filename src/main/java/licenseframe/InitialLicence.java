@@ -7,7 +7,7 @@ import database.insert.DatabaseInsert;
 import lazyfunction.LazyComputerInfo;
 import lazyfunction.LazyMD5;
 import lazyfunction.LazyWriter;
-import licenseframe.users.LicensedUsers;
+import licenseframe.users.LicensedUser;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,9 +23,12 @@ import java.util.Date;
 /**
  * Created by shyslav on 9/25/16.
  */
-public class InitialLicence extends ArrayList<LicensedUsers> {
+public class InitialLicence extends ArrayList<LicensedUser> {
     private static final InitialLicence licence = new InitialLicence();
 
+    /**
+     * Write licence to file
+     */
     private InitialLicence() {
         getFromDBLicenses();
         try {
@@ -46,8 +49,8 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
             PreparedStatement preparedStatement = db.getConnection().prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                LicensedUsers users = readUsers(rs.getString("computerData"));
-                this.add(new LicensedUsers(rs.getInt("id"),
+                LicensedUser users = readUsers(rs.getString("computerData"));
+                this.add(new LicensedUser(rs.getInt("id"),
                         users.getComputerName(),
                         users.getUserName(),
                         users.getSystem(),
@@ -76,12 +79,33 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
 
     /**
      * Generate computer data to md5
+     *
      * @return md5 computer info with computer name + username + osname
      */
     public static String generateComputerDataMd5() {
         return LazyMD5.md5(LazyComputerInfo.getComputerName() + "..." + LazyComputerInfo.getUserName() + "..." + LazyComputerInfo.getOSName());
     }
 
+    /**
+     * Generate comuter data licence to json
+     *
+     * @return compute json data
+     */
+    public static String generateComputerData() {
+        LicensedUser user = new LicensedUser(
+                LazyComputerInfo.getComputerName(),
+                LazyComputerInfo.getUserName(),
+                LazyComputerInfo.getOSName(),
+                LazyComputerInfo.getDriverInfo().get(0).getTotalSpace(),
+                "09/25/2016",
+                "12/25/2018"
+        );
+        return LazyWriter.dataToJson(user);
+    }
+
+    /**
+     * Delete all data from table licence
+     */
     private void clearLicensesTable() {
         String query = "delete from license";
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -103,7 +127,7 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      */
     public static boolean checkLicense() {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        for (LicensedUsers user : getLicence()) {
+        for (LicensedUser user : getLicence()) {
             if (user.getUserName().equals(getCurrentUser().getUserName())
                     && user.getComputerName().equals(getCurrentUser().getComputerName())
                     && user.getMd5License().equals(generateComputerDataMd5())) {
@@ -126,8 +150,8 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      *
      * @return current user parameters
      */
-    private static LicensedUsers getCurrentUser() {
-        return new LicensedUsers(LazyComputerInfo.getComputerName(),
+    private static LicensedUser getCurrentUser() {
+        return new LicensedUser(LazyComputerInfo.getComputerName(),
                 LazyComputerInfo.getUserName(),
                 LazyComputerInfo.getOSName(),
                 LazyComputerInfo.getDriverInfo().get(0).getTotalSpace());
@@ -139,9 +163,9 @@ public class InitialLicence extends ArrayList<LicensedUsers> {
      * @return licensed users
      * @throws IOException
      */
-    private static LicensedUsers readUsers(String json) throws IOException {
+    private static LicensedUser readUsers(String json) throws IOException {
         Gson gson = new GsonBuilder().create();
-        return gson.fromJson(json, LicensedUsers.class);
+        return gson.fromJson(json, LicensedUser.class);
     }
 
     /**
